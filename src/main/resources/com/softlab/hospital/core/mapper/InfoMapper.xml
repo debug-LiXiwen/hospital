@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.softlab.hospital.core.mapper.InfoMapper">
+  <resultMap id="BaseResultMap" type="com.softlab.hospital.core.model.Info">
+    <id column="system_id" jdbcType="BIGINT" property="systemId" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="hospital" jdbcType="VARCHAR" property="hospital" />
+    <result column="room" jdbcType="VARCHAR" property="room" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from info
+    where system_id = #{systemId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.softlab.hospital.core.model.Info">
+    insert into info (system_id, province, city, 
+      hospital, room)
+    values (#{systemId,jdbcType=BIGINT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{hospital,jdbcType=VARCHAR}, #{room,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.softlab.hospital.core.model.Info">
+    update info
+    set
+      <if test="null != province and '' != province" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="null != city and '' != city" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="null != hospital and '' != hospital" >
+        hospital = #{hospital,jdbcType=VARCHAR},
+      </if>
+      <if test="null != room and '' != room" >
+        room = #{room,jdbcType=VARCHAR},
+      </if>
+      system_id = #{systemId,jdbcType=BIGINT}
+    where system_id = #{systemId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select system_id, province, city, hospital, room
+    from info
+    where system_id = #{systemId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select system_id, province, city, hospital, room
+    from info
+  </select>
+  <select id="selectAllProvince" resultType="java.lang.String">
+    select distinct province
+    from info
+  </select>
+
+  <select id="selectAllCity" resultType="java.lang.String">
+    select distinct city
+    from info
+    <where>
+      <if test="null != province and '' != province">
+        and province = #{province}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectAllHospital" resultType="java.lang.String">
+    select distinct hospital
+    from info
+    <where>
+      <if test="null != province and '' != province">
+        and province = #{province}
+      </if>
+      <if test="null != city and '' != city">
+        and city = #{city}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectAllRoom" resultType="java.lang.String">
+    select distinct room
+    from info
+    <where>
+      <if test="null != province and '' != province">
+        and province = #{province}
+      </if>
+      <if test="null != city and '' != city">
+        and city = #{city}
+      </if>
+      <if test="null != hospital and '' != hospital">
+        and hospital = #{hospital}
+      </if>
+    </where>
+  </select>
+</mapper>
